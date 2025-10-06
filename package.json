@@ -1,3 +1,7 @@
 {
-  "empty": true
+  "homepage": "https://<your-username>.github.io/gla360-app",
+  "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
+  }
 }
