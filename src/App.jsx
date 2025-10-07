@@ -1,22 +1,23 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import HomePage from './pages/HomePage'
-import SelfAssessmentPage from './pages/SelfAssessmentPage'
-import InviteRatersPage from './pages/InviteRatersPage'
-import ResultsPage from './pages/ResultsPage'
-import DevelopmentPlanPage from './pages/DevelopmentPlanPage'
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
+import HomePage from './pages/HomePage.jsx'
+import SelfAssessmentPage from './pages/SelfAssessmentPage.jsx'
+import ResultsPage from './pages/ResultsPage.jsx'
 
-function App() {
+export default function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/self-assessment" element={<SelfAssessmentPage />} />
-        <Route path="/invite-raters" element={<InviteRatersPage />} />
-        <Route path="/results" element={<ResultsPage />} />
-        <Route path="/development-plan" element={<DevelopmentPlanPage />} />
-      </Routes>
-    </Router>
+    <BrowserRouter>
+      <nav style={{ padding: 12, borderBottom: '1px solid #eee' }}>
+        <Link to="/" style={{ marginRight: 12 }}>Home</Link>
+        <Link to="/self" style={{ marginRight: 12 }}>Self Assessment</Link>
+        <Link to="/results">Results</Link>
+      </nav>
+      <div style={{ padding: 20 }}>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/self" element={<SelfAssessmentPage />} />
+          <Route path="/results" element={<ResultsPage />} />
+        </Routes>
+      </div>
+    </BrowserRouter>
   )
-}
-
-export default App
+} 
