@@ -2,7 +2,8 @@ import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
 import HomePage from './pages/HomePage.jsx'
 import SelfAssessmentPage from './pages/SelfAssessmentPage.jsx'
 import ResultsPage from './pages/ResultsPage.jsx'
-
+console.log('[App.jsx] render'
+            
 export default function App() {
   return (
     <BrowserRouter basename="/gla360-app">
