@@ -49,10 +49,9 @@ jobs:
         shell: bash
         run: - name: Inspect dist
     run: |
-    
       echo "--- dist listing ---"
       ls -la dist
-      echo "--- index.html head ---"
+      echo "--- head of dist/index.html ---"
       sed -n '1,120p' dist/index.html
-      echo "--- asset references (expect /gla360-app/assets) ---"
+      echo "--- asset refs (tikimės /gla360-app/assets) ---"
       grep -Eo "/gla360-app/assets/[a-zA-Z0-9._-]+" dist/index.html || true
