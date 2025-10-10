@@ -1,4 +1,3 @@
-
 name: Deploy Vite app to GitHub Pages
 
 on:
@@ -6,6 +5,7 @@ on:
     branches: [ "main" ]
   workflow_dispatch:
 
+# Reikalingos teisės Pages diegimui
 permissions:
   contents: read
   pages: write
@@ -26,10 +26,10 @@ jobs:
       - name: Install deps
         run: npm ci
 
-      - name: Build
+      - name: Build (Vite)
         run: npm run build
 
-      - name: Upload artifact
+      - name: Upload artifact for Pages
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./dist
@@ -40,13 +40,13 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
 
-      - name: Smoke test (retry)
+      - name: Smoke test (retry until 200)
+        shell: bash
         run: |
           URL="${{ steps.deployment.outputs.page_url }}"
           echo "Testing $URL"
