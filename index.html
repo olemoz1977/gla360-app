@@ -9,8 +9,16 @@
   <body>
     <!-- React root -->
     <div id="root"></div>
-
-    <!-- Vite įėjimo taškas, kai main.jsx yra src/ kataloge -->
+/src/main.jsx</script>
+<script>
+  (() => {
+    const redirect = sessionStorage.redirect;
+    delete sessionStorage.redirect;
+    if (redirect && redirect !== location.href) {
+      history.replaceState(null, null, redirect);
+    }
+  })();
+</script>
     <script type="/script>
 
     <!-- SPA deep-link "restore" skriptas:
