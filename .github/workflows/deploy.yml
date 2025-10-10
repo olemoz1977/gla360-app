@@ -5,7 +5,6 @@ on:
     branches: [ "main" ]
   workflow_dispatch:
 
-# Reikalingos teisės Pages diegimui (oficialus reikalavimas)
 permissions:
   contents: read
   pages: write
@@ -27,15 +26,14 @@ jobs:
         with:
           node-version: 20
 
-      # Jei nėra package-lock.json, ci kris — todėl saugiau:
+      # Jei nėra package-lock.json, npm ci kris — todėl:
       - name: Install dependencies
-        run: |
-          npm ci || npm install
+        run: npm ci || npm install
 
       - name: Build (Vite)
         run: npm run build
 
-      # 👇 Diagnozei: patikriname, kas pateko į dist/
+      # 🔎 Diagnozei — kas sugeneruota dist/ ?
       - name: Inspect dist
         run: |
           echo "--- dist listing ---"
@@ -45,7 +43,6 @@ jobs:
           echo "--- asset refs (tikimės /gla360-app/assets) ---"
           grep -Eo "/gla360-app/assets/[a-zA-Z0-9._-]+" dist/index.html || true
 
-      # Artefaktą su dist įkeliame į Pages
       - name: Upload artifact for Pages
         uses: actions/upload-pages-artifact@v3
         with:
@@ -62,7 +59,6 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v4
 
-      # Po deploy – „smoke test“ (200 status)
       - name: Smoke test (retry until 200)
         shell: bash
         run: |
