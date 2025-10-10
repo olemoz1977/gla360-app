@@ -2,17 +2,19 @@
 <html lang="lt">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>GLA360</title>
-    /favicon.ico
   </head>
+
   <body>
+    <!-- React root -->
     <div id="root"></div>
 
-    <!-- Vite įėjimo taškas -->
-    /src/main.jsx</script>
+    <!-- Vite įėjimo taškas, kai main.jsx yra src/ kataloge -->
+    <script type="/script>
 
-    <!-- SPA deep-link "restore" skriptas -->
+    <!-- SPA deep-link "restore" skriptas:
+         atstato tikrą kelią (pvz., /gla360-app/results) po GitHub Pages 404 -->
     <script>
       (() => {
         const redirect = sessionStorage.redirect;
