@@ -1,17 +1,22 @@
 <!doctype html>
-<html lang="en">
+<html>
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>GLA360</title>
-    <!-- Nebūtina, bet panaikins favicon 404 įspėjimą -->
-    <link
-      rel="icon"
-      href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0-size=%2290%22>🌐</text></svg>
-  </head>
+    <meta charset="utf-8">
+    <title>Page Not Found</title>
+<script>
+  // SPA redirect hack (rafgraph pattern)
+  sessionStorage.redirect = location.href;
+</script>
+</head>
   <body>
-    <div id="root"></div>
-    
-    /src/main.jsx</script>
-  </body>
+    <script>
+(() => {
+  const redirect = sessionStorage.redirect;
+  delete sessionStorage.redirect;
+  if (redirect && redirect !== location.href) {
+    history.replaceState(null, null, redirect);
+  }
+})();
+</script>
+ </body>
 </html>
