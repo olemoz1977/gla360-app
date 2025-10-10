@@ -5,11 +5,15 @@ on:
     branches: [ "main" ]
   workflow_dispatch:
 
-# Reikalingos teisės Pages diegimui
+# Reikalingos teisės Pages diegimui (oficialus reikalavimas)
 permissions:
   contents: read
   pages: write
   id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
 
 jobs:
   build:
@@ -23,12 +27,25 @@ jobs:
         with:
           node-version: 20
 
-      - name: Install deps
-        run: npm ci
+      # Jei nėra package-lock.json, ci kris — todėl saugiau:
+      - name: Install dependencies
+        run: |
+          npm ci || npm install
 
       - name: Build (Vite)
         run: npm run build
 
+      # 👇 Diagnozei: patikriname, kas pateko į dist/
+      - name: Inspect dist
+        run: |
+          echo "--- dist listing ---"
+          ls -la dist
+          echo "--- head of dist/index.html ---"
+          sed -n '1,120p' dist/index.html
+          echo "--- asset refs (tikimės /gla360-app/assets) ---"
+          grep -Eo "/gla360-app/assets/[a-zA-Z0-9._-]+" dist/index.html || true
+
+      # Artefaktą su dist įkeliame į Pages
       - name: Upload artifact for Pages
         uses: actions/upload-pages-artifact@v3
         with:
@@ -45,13 +62,20 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v4
 
+      # Po deploy – „smoke test“ (200 status)
       - name: Smoke test (retry until 200)
         shell: bash
-        run: - name: Inspect dist
-    run: |
-      echo "--- dist listing ---"
-      ls -la dist
-      echo "--- head of dist/index.html ---"
-      sed -n '1,120p' dist/index.html
-      echo "--- asset refs (tikimės /gla360-app/assets) ---"
-      grep -Eo "/gla360-app/assets/[a-zA-Z0-9._-]+" dist/index.html || true
+        run: |
+          URL="${{ steps.deployment.outputs.page_url }}"
+          echo "Testing $URL"
+          for i in {1..10}; do
+            code=$(curl -s -o /dev/null -w "%{http_code}" "$URL")
+            if [ "$code" = "200" ]; then
+              echo "OK: $code"
+              exit 0
+            fi
+            echo "Attempt $i: got $code, retrying..."
+            sleep 3
+          done
+          echo "Failed: last HTTP $code"
+          exit 1
